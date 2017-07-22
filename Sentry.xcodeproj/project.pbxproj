@@ -182,6 +182,8 @@
 		63BE85711ECEC6DE00DC44F5 /* NSDate+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BE856F1ECEC6DE00DC44F5 /* NSDate+Extras.m */; };
 		63D50BC91EE049B1008902A3 /* SentryClient+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 63D50BC81EE049B1008902A3 /* SentryClient+Internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		63D50BCA1EE049B1008902A3 /* SentryClient+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 63D50BC81EE049B1008902A3 /* SentryClient+Internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		DE24556B1F22D681003BE10F /* NSMutableDictionary+IgnoreNil.h in Headers */ = {isa = PBXBuildFile; fileRef = DE2455691F22D681003BE10F /* NSMutableDictionary+IgnoreNil.h */; };
+		DE24556C1F22D681003BE10F /* NSMutableDictionary+IgnoreNil.m in Sources */ = {isa = PBXBuildFile; fileRef = DE24556A1F22D681003BE10F /* NSMutableDictionary+IgnoreNil.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -319,6 +321,8 @@
 		63BE856E1ECEC6DE00DC44F5 /* NSDate+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+Extras.h"; path = "include/NSDate+Extras.h"; sourceTree = "<group>"; };
 		63BE856F1ECEC6DE00DC44F5 /* NSDate+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Extras.m"; sourceTree = "<group>"; };
 		63D50BC81EE049B1008902A3 /* SentryClient+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SentryClient+Internal.h"; path = "include/SentryClient+Internal.h"; sourceTree = "<group>"; };
+		DE2455691F22D681003BE10F /* NSMutableDictionary+IgnoreNil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+IgnoreNil.h"; sourceTree = "<group>"; };
+		DE24556A1F22D681003BE10F /* NSMutableDictionary+IgnoreNil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary+IgnoreNil.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -402,6 +406,8 @@
 				63BE856F1ECEC6DE00DC44F5 /* NSDate+Extras.m */,
 				63295AF31EF3C7DB002D4490 /* NSDictionary+Sanitize.h */,
 				63295AF41EF3C7DB002D4490 /* NSDictionary+Sanitize.m */,
+				DE2455691F22D681003BE10F /* NSMutableDictionary+IgnoreNil.h */,
+				DE24556A1F22D681003BE10F /* NSMutableDictionary+IgnoreNil.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -599,6 +605,7 @@
 				63B818F91EC34639002FDF4C /* SentryDebugMeta.h in Headers */,
 				6360850D1ED2AFE100E8599E /* SentryBreadcrumb.h in Headers */,
 				63295AF51EF3C7DB002D4490 /* NSDictionary+Sanitize.h in Headers */,
+				DE24556B1F22D681003BE10F /* NSMutableDictionary+IgnoreNil.h in Headers */,
 				63AA76991EB9C1C200D153DE /* SentryDefines.h in Headers */,
 				635B3F381EBC6E2500A6176D /* SentryAsynchronousOperation.h in Headers */,
 				630436101EC0600A00C4D3FA /* SentrySerializable.h in Headers */,
@@ -812,6 +819,7 @@
 				63B818FA1EC34639002FDF4C /* SentryDebugMeta.m in Sources */,
 				63AA75EF1EB8B3C400D153DE /* SentryClient.m in Sources */,
 				63AA769E1EB9C57A00D153DE /* SentryError.m in Sources */,
+				DE24556C1F22D681003BE10F /* NSMutableDictionary+IgnoreNil.m in Sources */,
 				6360850A1ED2AFA700E8599E /* SentryBreadcrumbStore.m in Sources */,
 				639FCFA91EBC80CC00778193 /* SentryFrame.m in Sources */,
 				630435FF1EBCA9D900C4D3FA /* SentryNSURLRequest.m in Sources */,

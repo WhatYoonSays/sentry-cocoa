@@ -10,8 +10,10 @@
 
 #if __has_include(<Sentry/Sentry.h>)
 #import <Sentry/SentryDefines.h>
+#import <Sentry/NSMutableDictionary+IgnoreNil.h>
 #else
 #import "SentryDefines.h"
+#import "NSMutableDictionary+IgnoreNil.h"
 #endif
 
 NS_ASSUME_NONNULL_BEGIN

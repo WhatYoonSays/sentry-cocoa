@@ -86,9 +86,12 @@ NS_ASSUME_NONNULL_BEGIN
     NSMutableArray *contents = [NSMutableArray new];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     for (NSString *filePath in [self allFilesInFolder:path]) {
+        NSMutableDictionary *content = [NSMutableDictionary dictionary];
         NSString *finalPath = [path stringByAppendingPathComponent:filePath];
-        [contents addObject:@{@"path": finalPath, @"data": [fileManager contentsAtPath:finalPath]}];
+        [content setObject:finalPath forKey:@"path"];
+        [content insertAnyObject:[fileManager contentsAtPath:finalPath] forKey:@"data"];
     }
+    
     return contents;
 }
 
