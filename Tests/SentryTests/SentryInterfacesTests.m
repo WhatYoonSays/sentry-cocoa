@@ -116,6 +116,18 @@
                                  @"sdk": @{@"name": @"sentry-cocoa", @"version": SentryClient.versionString},
                                  @"timestamp": [date sentry_toIso8601String]};
     XCTAssertEqualObjects([event2 serialize], serialized2);
+    
+    SentryEvent *event3 = [[SentryEvent alloc] initWithLevel:kSentrySeverityInfo];
+    event3.timestamp = date;
+    event3.sdk = @{@"version": @"0.15.2", @"name": @"sentry-react-native", @"integrations": @[@"sentry-cocoa"]};
+    NSDictionary *serialized3 = @{@"contexts": [[[SentryContext alloc] init] serialize],
+                                  @"event_id": event3.eventId,
+                                  @"level": @"info",
+                                  @"platform": @"cocoa",
+                                  @"sdk": @{@"name": @"sentry-react-native", @"version": @"0.15.2",
+                                            @"integrations": @[@"sentry-cocoa"]},
+                                  @"timestamp": [date sentry_toIso8601String]};
+    XCTAssertEqualObjects([event3 serialize], serialized3);
 }
 
 - (void)testSetDistToNil {
@@ -164,12 +176,14 @@
 }
 
 - (void)testUser {
-    SentryUser *user = [[SentryUser alloc] initWithUserId:@"1"];
+    SentryUser *user = [[SentryUser alloc] init];
+    user.userId = @"1";
     XCTAssertNotNil(user.userId);
     NSDictionary *serialized = @{@"id": @"1"};
     XCTAssertEqualObjects([user serialize], serialized);
 
-    SentryUser *user2 = [[SentryUser alloc] initWithUserId:@"1"];
+    SentryUser *user2 = [[SentryUser alloc] init];
+    user2.userId = @"1";
     XCTAssertNotNil(user2.userId);
     user2.email = @"a@b.com";
     user2.username = @"tony";

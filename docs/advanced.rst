@@ -12,6 +12,14 @@ We've switched our code from Swift to Objective-C, so the code below shows mostl
 Swift code. Even though Sentry is perfectly compatible with Objective-C all classes
 are prefixed with `Sentry`.
 
+Capturing uncaught exceptions on macOS
+--------------------------------------
+
+By default macOS application do not crash whenever an uncaught exception occurs.
+There are some additional steps you have to take to make this work with Sentry.
+You have to open the applications ``Info.plist`` file and look for ``Principal class``.
+The content of it which should be ``NSApplication`` should be replaced with ``SentryCrashExceptionApplication``.
+
 Sending Events
 --------------
 
@@ -143,3 +151,14 @@ So for example if you want to send a simple message to the server and add the st
         Client.shared?.appendStacktrace(to: event)
         Client.shared?.send(event: event)
     }
+
+Event Sampling
+--------------
+
+If you are sending to many events and want to not send all events you can set the ``sampleRate`` parameter.
+It's a number between 0 and 1 where when you set it to 1, all events will be sent.
+Notice that ``shouldSendEvent`` will set for this.
+
+.. sourcecode:: swift
+
+    Client.shared?.sampleRate = 0.75 // 75% of all events will be sent

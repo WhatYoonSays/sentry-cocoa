@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "Sentry"
-  s.version      = "3.2.0"
+  s.version      = "3.8.3"
   s.summary      = "Sentry client for cocoa"
   s.homepage     = "https://github.com/getsentry/sentry-cocoa"
   s.license      = "mit"
@@ -15,13 +15,13 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.libraries = 'z'
 
-  s.default_subspecs = 'Core'
+  s.default_subspecs = ['Core', 'KSCrash']
 
   s.subspec 'Core' do |sp|
     sp.source_files = "Sources/Sentry/**/*.{h,m}"
   end
 
   s.subspec 'KSCrash' do |ks|
-    ks.dependency 'KSCrash/Core', '~> 1.15.11'
+    ks.dependency 'KSCrash/Core', '~> 1.15.12'
   end
 end

@@ -57,6 +57,12 @@ NS_SWIFT_NAME(Client)
 @property(nonatomic, strong) NSDictionary<NSString *, id> *_Nullable extra;
 
 /**
+ * This will be filled on every startup with a dictionary with extra, tags, user which will be used
+ * when sending the crashreport
+ */
+@property(nonatomic, strong) NSDictionary<NSString *, id> *_Nullable lastContext;
+
+/**
  * Contains the last successfully sent event
  */
 @property(nonatomic, strong) SentryEvent *_Nullable lastEvent;
@@ -90,6 +96,12 @@ NS_SWIFT_NAME(Client)
 @property(nonatomic, class) SentryClient *_Nullable sharedClient;
 
 /**
+ * Defines the sample rate of SentryClient, should be a float between 0.0 and 1.0
+ * Setting this property sets shouldSendEvent callback and applies a random event sampler.
+ */
+@property(nonatomic) float sampleRate;
+
+/**
  * Initializes a SentryClient. Pass your private DSN string.
  *
  * @param dsn DSN string of sentry
@@ -112,6 +124,13 @@ NS_SWIFT_NAME(Client)
  */
 - (void)sendEvent:(SentryEvent *)event withCompletionHandler:(_Nullable SentryRequestFinished)completionHandler
 NS_SWIFT_NAME(send(event:completion:));
+
+/**
+ * This function stores an event to disk. It will be send with the next batch.
+ * This function is mainly used for react native.
+ * @param event SentryEvent that should be sent
+ */
+- (void)storeEvent:(SentryEvent *)event;
 
 /**
  * Clears all context related variables tags, extra and user

@@ -44,21 +44,22 @@ NSString *reportPath = @"";
     XCTAssertEqualObjects(firstDebugImage.minorVersion, @(0));
     XCTAssertEqualObjects(firstDebugImage.revisionVersion, @(0));
 
-    SentryThread *firstThread = event.threads.firstObject;
-    XCTAssertEqualObjects(firstThread.stacktrace.frames.lastObject.symbolAddress, @"0x000000010014c1ec");
-    XCTAssertEqualObjects(firstThread.stacktrace.frames.lastObject.instructionAddress, @"0x000000010014caa4");
-    XCTAssertEqualObjects(firstThread.stacktrace.frames.lastObject.imageAddress, @"0x0000000100144000");
-    XCTAssertEqualObjects(firstThread.stacktrace.registers[@"x4"], @"0x0000000102468000");
-    XCTAssertEqualObjects(firstThread.stacktrace.registers[@"x9"], @"0x32a77e172fd70062");
+    SentryException *exception = event.exceptions.firstObject;
+    XCTAssertEqualObjects(exception.thread.stacktrace.frames.lastObject.symbolAddress, @"0x000000010014c1ec");
+    XCTAssertEqualObjects(exception.thread.stacktrace.frames.lastObject.instructionAddress, @"0x000000010014caa4");
+    XCTAssertEqualObjects(exception.thread.stacktrace.frames.lastObject.imageAddress, @"0x0000000100144000");
+    XCTAssertEqualObjects(exception.thread.stacktrace.registers[@"x4"], @"0x0000000102468000");
+    XCTAssertEqualObjects(exception.thread.stacktrace.registers[@"x9"], @"0x32a77e172fd70062");
 
-    XCTAssertEqualObjects(firstThread.crashed, @(YES));
-    XCTAssertEqualObjects(firstThread.current, @(NO));
-    XCTAssertEqualObjects(firstThread.name, @"com.apple.main-thread");
+    XCTAssertEqualObjects(exception.thread.crashed, @(YES));
+    XCTAssertEqualObjects(exception.thread.current, @(NO));
+    XCTAssertEqualObjects(exception.thread.name, @"com.apple.main-thread");
     XCTAssertEqual(event.threads.count, (unsigned long)10);
 
     XCTAssertEqual(event.exceptions.count, (unsigned long)1);
-    SentryException *exception = event.exceptions.firstObject;
+    SentryThread *firstThread = event.threads.firstObject;
     XCTAssertEqualObjects(exception.thread.threadId, firstThread.threadId);
+    XCTAssertNil(firstThread.stacktrace);
     XCTAssertEqualObjects(exception.mechanism[@"posix_signal"][@"name"], @"SIGBUS");
     XCTAssertEqualObjects(exception.mechanism[@"mach_exception"][@"exception_name"], @"EXC_BAD_ACCESS");
     XCTAssertEqualObjects(exception.mechanism[@"relevant_address"], @"0x0000000102468000");
@@ -66,6 +67,9 @@ NSString *reportPath = @"";
     XCTAssertTrue([NSJSONSerialization isValidJSONObject:[event serialize]]);
     XCTAssertNotNil([[event serialize] valueForKeyPath:@"exception.values"]);
     XCTAssertNotNil([[event serialize] valueForKeyPath:@"threads.values"]);
+
+    XCTAssertEqualObjects(event.releaseName, @"io.sentry.crashTest-1.4.1");
+    XCTAssertEqualObjects(event.dist, @"201702072010");
 }
 
 - (void)testRawWithCrashReport {
@@ -141,7 +145,8 @@ NSString *reportPath = @"";
     NSDictionary *rawCrash = [self getCrashReport];
     SentryKSCrashReportConverter *reportConverter = [[SentryKSCrashReportConverter alloc] initWithReport:rawCrash];
     SentryEvent *event = [reportConverter convertReportToEvent];
-    XCTAssertEqualObjects(event.threads.firstObject.stacktrace.frames.lastObject.function, @"<redacted>");
+    SentryException *exception = event.exceptions.firstObject;
+    XCTAssertEqualObjects(exception.thread.stacktrace.frames.lastObject.function, @"<redacted>");
 }
 
 - (void)testReactNative {
@@ -167,7 +172,8 @@ NSString *reportPath = @"";
     NSDictionary *rawCrash = [self getCrashReport];
     SentryKSCrashReportConverter *reportConverter = [[SentryKSCrashReportConverter alloc] initWithReport:rawCrash];
     SentryEvent *event = [reportConverter convertReportToEvent];
-    XCTAssertEqual(event.threads.firstObject.stacktrace.frames.count, (unsigned long)22);
+    SentryException *exception = event.exceptions.firstObject;
+    XCTAssertEqual(exception.thread.stacktrace.frames.count, (unsigned long)22);
 }
 
 - (void)testFatalError {
@@ -180,10 +186,20 @@ NSString *reportPath = @"";
 }
 
 - (void)testUserInfo {
-    reportPath = @"Resources/CrashUserInfo";
+    reportPath = @"Resources/fatalError";
     [self isValidReport];
     NSDictionary *rawCrash = [self getCrashReport];
     SentryKSCrashReportConverter *reportConverter = [[SentryKSCrashReportConverter alloc] initWithReport:rawCrash];
+    reportConverter.userContext = @{@"tags": @{@"a": @"b",@"c": @"d"},
+                                    @"extra": @{@"a": @"b",@"c": @"d",@"e": @"f"},
+                                    @"user": @{
+                                            @"email": @"john@apple.com",
+                                            @"extra":     @{
+                                                    @"is_admin": @(NO)
+                                                    },
+                                            @"id": @"12341",
+                                            @"username": @"username"
+                                            }};
     SentryEvent *event = [reportConverter convertReportToEvent];
     NSDictionary *serializedUser = @{
                                      @"email": @"john@apple.com",
@@ -195,7 +211,7 @@ NSString *reportPath = @"";
                                      };
     [self compareDict:serializedUser withDict:[event.user serialize]];
     XCTAssertEqual(event.tags.count, (unsigned long)2);
-    XCTAssertEqual(event.extra.count, (unsigned long)7);
+    XCTAssertEqual(event.extra.count, (unsigned long)3);
 }
 
 #pragma mark private helper

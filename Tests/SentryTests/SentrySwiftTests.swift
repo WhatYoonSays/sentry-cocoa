@@ -69,12 +69,12 @@ class SentrySwiftTests: XCTestCase {
         
         Client.logLevel = .debug
         Client.shared?.clearContext()
-        // Client.shared?.lastEvent
         Client.shared?.breadcrumbs.maxBreadcrumbs = 100
         Client.shared?.breadcrumbs.add(Breadcrumb(level: .info, category: "test"))
         XCTAssertEqual(Client.shared?.breadcrumbs.count(), 1)
         Client.shared?.enableAutomaticBreadcrumbTracking()
-        let user = User(userId: "1234")
+        let user = User()
+        user.userId = "1234"
         user.email = "hello@sentry.io"
         user.extra = ["is_admin": true]
         Client.shared?.user = user
