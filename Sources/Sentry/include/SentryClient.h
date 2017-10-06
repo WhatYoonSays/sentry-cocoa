@@ -93,7 +93,7 @@ NS_SWIFT_NAME(Client)
  * Returns the shared sentry client
  * @return sharedClient if it was set before
  */
-@property(nonatomic, class) SentryClient *_Nullable sharedClient;
+@property(nonatomic, class, strong) SentryClient *_Nullable sharedClient;
 
 /**
  * Defines the sample rate of SentryClient, should be a float between 0.0 and 1.0
